@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 03:26:35 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/26 23:38:30 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/27 01:18:07 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ bool	philo_cant_eat(t_philo *philo)
 		return (true);
 	}
 	take_forks(philo);
-	usleep(philo->time_to_sleep * 1000);
+	usleep(philo->time_to_eat * 1000);
 	drop_the_forks(philo);
 	pthread_mutex_lock(&philo->ressources->eat_mutex);
 	philo->ressources->time_eaten++;

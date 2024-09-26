@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/27 00:06:58 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/27 01:13:42 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,17 +88,22 @@ void	monitor(t_philo **philosophers)
 	{
 		pthread_mutex_lock(&philo->ressources->eat_mutex);
 		magic_count = get_time() - philo->last_meal;
-		//printf("currentime = %ld, timeto die = %ld\n", magic_count, philo->time_to_die);
 		pthread_mutex_unlock(&philo->ressources->eat_mutex);
 		if (magic_count > philo->time_to_die)
+		{
+			printf("time ko\n");
 			break ;
+		}
 		pthread_mutex_lock(&philo->ressources->eat_mutex);
 		magic_count = philo->ressources->time_eaten;
 		pthread_mutex_unlock(&philo->ressources->eat_mutex);
-		if (philo->number_of_meal * philo->total_philo <= magic_count)
+		if (philo->number_of_meal * philo->total_philo == magic_count)
+		{
+			printf("time eaten ko\n");
 			break ;
+		}
 		if (philo->id == philo->total_philo - 1)
-			usleep(2000);
+			usleep(1000);
 		philo = philo->next;
 	}
 	pthread_mutex_lock(&philo->ressources->stop_mutex);
@@ -106,7 +111,7 @@ void	monitor(t_philo **philosophers)
 	pthread_mutex_unlock(&philo->ressources->stop_mutex);
 	join_threads(*philosophers, philo->total_philo);
 	if (philo->ressources->time_eaten != philo->number_of_meal)
-		print(DEAD, RED, philo);
+		printf(RED "%ld %d %s" RESET, get_time() - philo->start_time, philo->id + 1, DEAD);
 	clean_exit(*philosophers, philo->total_philo, 1);
 }
 
