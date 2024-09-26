@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/25 06:49:33 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/25 08:17:03 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-// # define FORK "has taken a fork 🍴\n"
-// # define EAT "is eating 🍝\n"
-// # define SLEEP "is sleeping 🌙\n"
-// # define THINK "is thinking  🤔\n"
-// # define DEAD "is dead 💀\n"
-// # define MERROR "mutex initialisation error\n"
-
-# define FORK "has taken a fork\n"
-# define EAT "is eating\n"
-# define SLEEP "is sleeping\n"
-# define THINK "is thinking\n"
-# define DEAD "is dead\n"
+# define FORK "has taken a fork 🍴\n"
+# define EAT "is eating 🍝\n"
+# define SLEEP "is sleeping 🌙\n"
+# define THINK "is thinking  🤔\n"
+# define DEAD "is dead 💀\n"
 # define MERROR "mutex initialisation error\n"
+
+// # define FORK "has taken a fork\n"
+// # define EAT "is eating\n"
+// # define SLEEP "is sleeping\n"
+// # define THINK "is thinking\n"
+// # define DEAD "is dead\n"
+// # define MERROR "mutex initialisation error\n"
 
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"

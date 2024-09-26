@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:56:29 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/25 07:20:22 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/26 23:22:52 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_philo(t_philo *philo)
 
 void	join_threads(t_philo *philosophers, int last_id)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = philosophers;
 	while (1)

@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 03:26:35 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/25 07:15:26 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/26 23:38:30 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	take_forks(t_philo *philo)
 {
-	if (philo->id % 2)
+	if (!philo->id % 2)
 	{
 		pthread_mutex_lock(&philo->fork);
 		print(FORK, GREY, philo);
@@ -36,7 +36,7 @@ void	take_forks(t_philo *philo)
 
 void	drop_the_forks(t_philo *philo)
 {
-	if (philo->id % 2)
+	if (!philo->id % 2)
 	{
 		pthread_mutex_unlock(&philo->next->fork);
 		pthread_mutex_unlock(&philo->fork);
@@ -53,8 +53,8 @@ bool	philo_cant_eat(t_philo *philo)
 	pthread_mutex_lock(&philo->ressources->stop_mutex);
 	if (philo->ressources->simulation_must_stop)
 	{
-		return (true);
 		pthread_mutex_unlock(&philo->ressources->stop_mutex);
+		return (true);
 	}
 	pthread_mutex_unlock(&philo->ressources->stop_mutex);
 	if (philo->id == philo->next->id)
@@ -77,12 +77,12 @@ bool	philo_cant_sleep(t_philo *philo)
 	pthread_mutex_lock(&philo->ressources->stop_mutex);
 	if (philo->ressources->simulation_must_stop)
 	{
-		return (true);
 		pthread_mutex_unlock(&philo->ressources->stop_mutex);
+		return (true);
 	}
 	pthread_mutex_unlock(&philo->ressources->stop_mutex);
 	print(SLEEP, BLUE, philo);
-	usleep(philo->time_to_sleep * 1000);
+	usleep(philo->time_to_sleep * 3000);
 	return (false);
 }
 
@@ -91,8 +91,8 @@ bool	philo_cant_think(t_philo *philo)
 	pthread_mutex_lock(&philo->ressources->stop_mutex);
 	if (philo->ressources->simulation_must_stop)
 	{
-		return (true);
 		pthread_mutex_unlock(&philo->ressources->stop_mutex);
+		return (true);
 	}
 	pthread_mutex_unlock(&philo->ressources->stop_mutex);
 	print(THINK, GREEN, philo);
