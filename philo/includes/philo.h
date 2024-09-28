@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/27 00:26:33 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/27 04:00:41 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-// # define FORK "has taken a fork 🍴\n"
-// # define EAT "is eating 🍝\n"
-// # define SLEEP "is sleeping 🌙\n"
-// # define THINK "is thinking  🤔\n"
-// # define DEAD "is dead 💀\n"
-// # define MERROR "mutex initialisation error\n"
-
-# define FORK "has taken a fork\n"
-# define EAT "is eating\n"
-# define SLEEP "is sleeping\n"
-# define THINK "is thinking\n"
-# define DEAD "is dead\n"
+# define FORK "has taken a fork 🍴\n"
+# define EAT "is eating 🍝\n"
+# define SLEEP "is sleeping 🌙\n"
+# define THINK "is thinking 🤔\n"
+# define DEAD "%ld %d is dead 💀\n"
 # define MERROR "mutex initialisation error\n"
+
+// # define FORK "has taken a fork\n"
+// # define EAT "is eating\n"
+// # define SLEEP "is sleeping\n"
+// # define THINK "is thinking\n"
+// # define DEAD "%ld %d is dead\n"
+// # define MERROR "mutex initialisation error\n"
 
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
@@ -54,6 +54,7 @@ typedef struct s_philo
 	int							number_of_meal;
 	long						last_meal;
 	long						start_time;
+	int							is_dead;
 	pthread_t					philo;
 	pthread_mutex_t				fork;
 	struct s_shared_ressources	*ressources;
@@ -100,5 +101,7 @@ bool							philo_cant_think(t_philo *philo);
 int								ft_atoi(char *str);
 long							get_time(void);
 void							print(char *str, char *color, t_philo *philo);
+bool							philo_is_dead(t_philo *philo);
+bool							philo_ate_enough(t_philo *philo);
 
 #endif

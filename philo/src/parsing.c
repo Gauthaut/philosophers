@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 17:01:15 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/27 01:15:36 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/27 03:52:23 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ t_philo	*new_philo(char **av, int i)
 		philo->number_of_meal = ft_atoi(av[5]);
 	philo->time_to_think = 0;
 	if (philo->total_philo % 2)
-		philo->time_to_think = philo->time_to_eat * 0.9;
+		philo->time_to_think = philo->time_to_eat * 0.8 * 1000;
+	philo->is_dead = 0;
 	philo->next = NULL;
 	return (philo);
 }
@@ -88,7 +89,7 @@ void	add_back_philo(t_philo **philo, t_philo *new)
 
 bool	cant_init_mutex(t_philo **philosophers)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	philo = *philosophers;
 	if (pthread_mutex_init(&philo->ressources->print_mutex, NULL) != 0)

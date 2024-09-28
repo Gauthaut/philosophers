@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/27 01:13:42 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/27 03:56:00 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,26 +82,15 @@ bool	cant_run_simulation(t_philo **philosophers)
 
 void	monitor(t_philo **philosophers)
 {
-	t_philo(*philo) = *philosophers;
-	long(magic_count);
+	t_philo	*philo;
+
+	philo = *philosophers;
 	while (1)
 	{
-		pthread_mutex_lock(&philo->ressources->eat_mutex);
-		magic_count = get_time() - philo->last_meal;
-		pthread_mutex_unlock(&philo->ressources->eat_mutex);
-		if (magic_count > philo->time_to_die)
-		{
-			printf("time ko\n");
+		if (philo_is_dead(philo))
 			break ;
-		}
-		pthread_mutex_lock(&philo->ressources->eat_mutex);
-		magic_count = philo->ressources->time_eaten;
-		pthread_mutex_unlock(&philo->ressources->eat_mutex);
-		if (philo->number_of_meal * philo->total_philo == magic_count)
-		{
-			printf("time eaten ko\n");
+		if (philo_ate_enough(philo))
 			break ;
-		}
 		if (philo->id == philo->total_philo - 1)
 			usleep(1000);
 		philo = philo->next;
@@ -110,14 +99,14 @@ void	monitor(t_philo **philosophers)
 	philo->ressources->simulation_must_stop = 1;
 	pthread_mutex_unlock(&philo->ressources->stop_mutex);
 	join_threads(*philosophers, philo->total_philo);
-	if (philo->ressources->time_eaten != philo->number_of_meal)
-		printf(RED "%ld %d %s" RESET, get_time() - philo->start_time, philo->id + 1, DEAD);
+	if (philo->is_dead)
+		printf(RED DEAD RESET, get_time() - philo->start_time, philo->id);
 	clean_exit(*philosophers, philo->total_philo, 1);
 }
 
 int	main(int ac, char **av)
 {
-	t_philo *philosophers;
+	t_philo	*philosophers;
 
 	if (cant_init_philo(ac, av, &philosophers))
 		return (printf(RED "can't init philos 💀\n" RESET));
