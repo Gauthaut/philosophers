@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/27 03:56:00 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/29 20:56:04 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,6 @@ void	monitor(t_philo **philosophers)
 			break ;
 		if (philo_ate_enough(philo))
 			break ;
-		if (philo->id == philo->total_philo - 1)
-			usleep(1000);
 		philo = philo->next;
 	}
 	pthread_mutex_lock(&philo->ressources->stop_mutex);
@@ -100,7 +98,7 @@ void	monitor(t_philo **philosophers)
 	pthread_mutex_unlock(&philo->ressources->stop_mutex);
 	join_threads(*philosophers, philo->total_philo);
 	if (philo->is_dead)
-		printf(RED DEAD RESET, get_time() - philo->start_time, philo->id);
+		printf(RED DEAD RESET, get_time() - philo->start_time, philo->id + 1);
 	clean_exit(*philosophers, philo->total_philo, 1);
 }
 

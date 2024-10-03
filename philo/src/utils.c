@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 02:30:45 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/27 03:52:59 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/29 20:59:34 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,8 @@ long	get_time(void)
 
 void	print(char *str, char *color, t_philo *philo)
 {
-	pthread_mutex_lock(&philo->ressources->stop_mutex);
-	if (philo->ressources->simulation_must_stop)
-	{
-		pthread_mutex_unlock(&philo->ressources->stop_mutex);
-		return ;
-	}
-	pthread_mutex_unlock(&philo->ressources->stop_mutex);
-	pthread_mutex_lock(&philo->ressources->print_mutex);
 	printf("%s%ld %d %s%s", color, get_time() - philo->start_time, philo->id
 		+ 1, str, RESET);
-	pthread_mutex_unlock(&philo->ressources->print_mutex);
 }
 
 bool	philo_is_dead(t_philo *philo)

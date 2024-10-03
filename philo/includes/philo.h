@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/27 04:00:41 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/09/29 21:07:43 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-# define FORK "has taken a fork 🍴\n"
-# define EAT "is eating 🍝\n"
-# define SLEEP "is sleeping 🌙\n"
-# define THINK "is thinking 🤔\n"
-# define DEAD "%ld %d is dead 💀\n"
-# define MERROR "mutex initialisation error\n"
-
-// # define FORK "has taken a fork\n"
-// # define EAT "is eating\n"
-// # define SLEEP "is sleeping\n"
-// # define THINK "is thinking\n"
-// # define DEAD "%ld %d is dead\n"
+// # define FORK "has taken a fork 🍴\n"
+// # define EAT "is eating 🍝\n"
+// # define SLEEP "is sleeping 🌙\n"
+// # define THINK "is thinking 🤔\n"
+// # define DEAD "%ld %d is dead 💀\n"
 // # define MERROR "mutex initialisation error\n"
+
+# define FORK "has taken a fork\n"
+# define EAT "is eating\n"
+# define SLEEP "is sleeping\n"
+# define THINK "is thinking\n"
+# define DEAD "%ld %d is dead\n"
+# define MERROR "mutex initialisation error\n"
 
 # define RED "\x1b[31m"
 # define GREEN "\x1b[32m"
@@ -73,7 +73,7 @@ typedef struct s_shared_ressources
 	int							time_eaten;
 }								t_shared_ressources;
 
-/* PARSING */
+	/* PARSING */
 
 bool							arguments_are_not_valid(int ac, char **av);
 t_shared_ressources				*create_shared_ressources(void);
@@ -81,14 +81,14 @@ t_philo							*new_philo(char **av, int i);
 void							add_back_philo(t_philo **philo, t_philo *new);
 bool							cant_init_mutex(t_philo **philosophers);
 
-/* EXIT */
+	/* EXIT */
 
 void							free_philo(t_philo *philo);
 void							join_threads(t_philo *philo, int last_id);
 void							destroy_mutexes(t_philo *philo, int last_id);
 void							clean_exit(t_philo *philos, int last_id, int f);
 
-/* ACTIONS */
+	/* ACTIONS */
 
 void							take_forks(t_philo *philo);
 void							drop_the_forks(t_philo *philo);
@@ -96,7 +96,7 @@ bool							philo_cant_eat(t_philo *philo);
 bool							philo_cant_sleep(t_philo *philo);
 bool							philo_cant_think(t_philo *philo);
 
-/* UTILS */
+	/* UTILS */
 
 int								ft_atoi(char *str);
 long							get_time(void);
