@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 17:01:15 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/14 18:48:35 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/23 04:32:17 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,34 +29,77 @@ bool	arguments_are_not_valid(int ac, char **av)
 				return (true);
 			j++;
 		}
+		if (ft_strlen(av[i]) > 11)
+			return (false);
 		i++;
 	}
 	return (false);
 }
 
-bool	cant_init_semaphore(t_philo **philo)
+void	init_philo(t_philo *philo, int ac, char **av)
 {
-	(*philo)->shared->pid_tab = malloc(sizeof(pid_t) * ((*philo)->total_philos));
-	if (!(*philo)->shared->pid_tab)
+	(*philo).total_philos = ft_atoi(av[1]);
+	(*philo).time_to_die = ft_atoi(av[2]) * 1000;
+	(*philo).time_to_eat = ft_atoi(av[3]) * 1000;
+	(*philo).time_to_sleep = ft_atoi(av[4]) * 1000;
+	(*philo).time_to_think = 0;
+	if ((*philo).total_philos % 2)
+		(*philo).time_to_think = (*philo).time_to_eat * 0.9;
+	(*philo).number_of_meal = -1;
+	if (av[5])
+		(*philo).number_of_meal = ft_atoi(av[5]);
+	(*philo).time_eaten = 0;
+	(*philo).child_must_stop = 0;
+}
+
+char	*get_sem_name(t_philo *philo, char type, int index)
+{
+	static char	str[6] = {0};
+	int			i;
+
+	i = 1;
+	if (index == 0)
+	{
+		memset(str, 'A', sizeof(char) * 5);
+		str[0] = type;
+		str[5] = 0;
+	}
+	else
+	{
+		while (str[i] == 'Z')
+		{
+			str[i] = 'A';
+			i++;
+		}
+		str[i]++;
+	}
+	return (str);
+}
+
+bool	cant_init_semaphore(t_philo *philo)
+{
+	int	i;
+
+	(*philo).waiter = malloc(sizeof(sem_t *) * (*philo).total_philos);
+	if (!(*philo).waiter)
 		return (true);
-	(*philo)->shared->pid_tab_has_been_created = 1;
-	(*philo)->shared->forks = sem_open(FSEM, O_CREAT, 0777,
-			(*philo)->total_philos);
-	if ((*philo)->shared->forks == SEM_FAILED)
-		return (true);
-	(*philo)->shared->forks_have_been_created = 1;
-	(*philo)->shared->waiter = sem_open(FSEM, O_CREAT, 0777,
-			(*philo)->total_philos / 2);
-	if ((*philo)->shared->waiter == SEM_FAILED)
-		return (true);
-	(*philo)->shared->waiter_sem_have_been_created = 1;
-	(*philo)->shared->print_sem = sem_open(PSEM, O_CREAT, 0777, 1);
-	if ((*philo)->shared->print_sem == SEM_FAILED)
-		return (true);
-	(*philo)->shared->print_sem_have_been_created = 1;
-	(*philo)->shared->death_sem = sem_open(DSEM, O_CREAT, 0777, 1);
-	if ((*philo)->shared->death_sem == SEM_FAILED)
-		return (true);
-	(*philo)->shared->death_sem_have_been_created = 1;
+	(*philo).child_monitor = malloc(sizeof(sem_t *) * (*philo).total_philos);
+	if (!(*philo).child_monitor)
+		return (free((*philo).waiter), true);
+	i = -1;
+	while (++i < (*philo).total_philos)
+	{
+		(*philo).waiter[i] = sem_open(get_sem_name(philo, 'W', i), O_CREAT,
+				0644, 1);
+	}
+	i = -1;
+	while (++i < (*philo).total_philos)
+	{
+		(*philo).child_monitor[i] = sem_open(get_sem_name(philo, 'C', i),
+				O_CREAT, 0644, 1);
+	}
+	(*philo).forks = sem_open(FSEM, O_CREAT, 0644, (*philo).total_philos);
+	(*philo).print = sem_open(PSEM, O_CREAT, 0644, 1);
+	(*philo).stop_simulation_sem = sem_open(SSEM, O_CREAT, 0644, 0);
 	return (false);
 }

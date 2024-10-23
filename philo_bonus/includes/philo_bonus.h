@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/15 14:41:10 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/23 01:55:28 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <fcntl.h>
 # include <pthread.h>
 # include <semaphore.h>
+# include <signal.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -49,24 +50,7 @@
 
 # define FSEM "/fork_semaphore"
 # define PSEM "/print_semaphore"
-# define DSEM "/death_semaphore"
-# define WSEM "/waiter_semaphore"
-
-typedef struct s_shared
-{
-	sem_t		*forks;
-	sem_t		*print_sem;
-	sem_t		*death_sem;
-	sem_t		*waiter;
-	int			forks_have_been_created;
-	int			print_sem_have_been_created;
-	int			death_sem_have_been_created;
-	int			waiter_sem_have_been_created;
-	pid_t		*pid_tab;
-	int			pid_tab_has_been_created;
-	int			simulation_must_stop;
-	int			time_eaten;
-}				t_shared;
+# define SSEM "/stop_simulation_semaphore"
 
 typedef struct s_philo
 {
@@ -75,36 +59,48 @@ typedef struct s_philo
 	int			time_to_die;
 	int			time_to_eat;
 	int			time_to_sleep;
+	int			time_to_think;
 	int			number_of_meal;
-	long long	last_meal_time;
-	int			start_time;
-	int			last_meal;
-	t_shared	*shared;
+	long		start_time;
+	long		last_meal_time;
+	int			time_eaten;
+	int			child_must_stop;
+	sem_t		*forks;
+	sem_t		*print;
+	sem_t		*stop_simulation_sem;
+	sem_t		**waiter;
+	sem_t		**child_monitor;
+	pthread_t	monitor_thread;
+	pid_t		*pid_tab;
 }				t_philo;
 
 /* PARSING */
 
 bool			arguments_are_not_valid(int ac, char **av);
-t_shared		*create_shared_ressources(void);
-bool			cant_init_semaphore(t_philo **philosophers);
+void			init_philo(t_philo *philo, int ac, char **av);
+char			*get_sem_name(t_philo *philo, char type, int index);
+bool			cant_init_semaphore(t_philo *philo);
 
-/* EXIT */
+/* MONITEUR */
 
-int				wait_child(t_philo **philosopher);
-void			clean_exit(t_philo **philos);
+bool			philo_ate_enough(t_philo *philo);
+bool			philo_is_dead(t_philo *philo);
+void			stop_simulation(t_philo *philo, pid_t *pid_tab);
+void			destroy_sem(t_philo *philo, int last_index);
 
 /* ACTIONS */
 
 void			take_fork(t_philo *philo);
+void			drop_the_fork(t_philo *philo);
 bool			philo_cant_eat(t_philo *philo);
 bool			philo_cant_sleep(t_philo *philo);
 bool			philo_cant_think(t_philo *philo);
 
 /* UTILS */
 
+int				ft_strlen(char *str);
 int				ft_atoi(char *str);
 long			get_time(void);
 void			print(char *str, char *color, t_philo *philo);
-bool			monitor(t_philo *philo);
 
 #endif
