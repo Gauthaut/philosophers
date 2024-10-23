@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 17:01:15 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/23 04:32:17 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/23 07:44:50 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ bool	cant_init_semaphore(t_philo *philo)
 {
 	int	i;
 
+	unlink_sem(philo, philo->total_philos);
 	(*philo).waiter = malloc(sizeof(sem_t *) * (*philo).total_philos);
 	if (!(*philo).waiter)
 		return (true);
@@ -89,15 +90,10 @@ bool	cant_init_semaphore(t_philo *philo)
 	i = -1;
 	while (++i < (*philo).total_philos)
 	{
-		(*philo).waiter[i] = sem_open(get_sem_name(philo, 'W', i), O_CREAT,
-				0644, 1);
-	}
-	i = -1;
-	while (++i < (*philo).total_philos)
-	{
-		(*philo).child_monitor[i] = sem_open(get_sem_name(philo, 'C', i),
+		(*philo).child_monitor[i] = sem_open(get_sem_name(philo, '/', i),
 				O_CREAT, 0644, 1);
 	}
+	(*philo).waiter = sem_open(WSEM, O_CREAT, 0666, 1);
 	(*philo).forks = sem_open(FSEM, O_CREAT, 0644, (*philo).total_philos);
 	(*philo).print = sem_open(PSEM, O_CREAT, 0644, 1);
 	(*philo).stop_simulation_sem = sem_open(SSEM, O_CREAT, 0644, 0);

@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/23 06:02:58 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/23 08:00:57 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ void	*monitor(void *args)
 			break ;
 		usleep(1000);
 	}
+	printf("monitor %d \n", philo->id);
 	sem_wait(philo->child_monitor[philo->id]);
 	philo->child_must_stop = 1;
 	sem_post(philo->child_monitor[philo->id]);
-	printf("monitor %d stopped child\n", philo->id);
 	return (NULL);
 }
 
@@ -46,22 +46,17 @@ void	exec_child(t_philo *philo)
 {
 	pthread_create(&philo->monitor_thread, NULL, monitor, philo);
 	if (philo->id % 2)
-		usleep(2000);
+		usleep(500);
 	while (1)
 	{
-		printf("child %d beat\n", philo->id);
 		if (philo_cant_eat(philo))
 			break ;
-		printf("child %d bsleept\n", philo->id);
 		if (philo_cant_sleep(philo))
 			break ;
-		// printf("child %d after sleep\n", philo->id);
-		printf("child %d teat\n", philo->id);
 		if (philo_cant_think(philo))
 			break ;
 	}
 	pthread_join(philo->monitor_thread, NULL);
-	printf("routine ended %d\n", philo->id);
 	exit(0);
 }
 
@@ -90,7 +85,6 @@ bool	cant_run_philo(t_philo *philo)
 	}
 	stop_simulation(philo, pid_tab);
 	free(pid_tab);
-	printf("after run ok\n"); //      here
 	return (false);
 }
 
