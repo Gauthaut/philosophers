@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/24 23:57:57 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/25 03:40:56 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	*monitor(void *args)
 		{
 			sem_wait(philo->print);
 			print(DEAD, RED, philo);
-			sem_post(philo->print);
 			sem_post(philo->stop_simulation_sem);
 			return (NULL);
 		}
@@ -41,7 +40,6 @@ void	*monitor(void *args)
 			break ;
 		usleep(1000);
 	}
-	// printf("monitor %d \n", philo->id);
 	sem_wait(philo->child_monitor[philo->id]);
 	philo->child_must_stop = 1;
 	sem_post(philo->child_monitor[philo->id]);
@@ -88,7 +86,6 @@ bool	cant_run_philo(t_philo *philo)
 			exec_child(philo);
 		else
 			i++;
-		printf("child %d pid = %d \n",i,  pid_tab[i - 1]);
 	}
 	stop_simulation(philo, pid_tab);
 	free(pid_tab);

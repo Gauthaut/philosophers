@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 17:01:15 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/23 07:44:50 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/25 03:29:40 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,10 @@ bool	cant_init_semaphore(t_philo *philo)
 	int	i;
 
 	unlink_sem(philo, philo->total_philos);
-	(*philo).waiter = malloc(sizeof(sem_t *) * (*philo).total_philos);
-	if (!(*philo).waiter)
-		return (true);
+
 	(*philo).child_monitor = malloc(sizeof(sem_t *) * (*philo).total_philos);
 	if (!(*philo).child_monitor)
-		return (free((*philo).waiter), true);
+		return (true);
 	i = -1;
 	while (++i < (*philo).total_philos)
 	{
