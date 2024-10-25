@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 02:45:00 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/23 08:01:16 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/24 04:09:40 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	stop_simulation(t_philo *philo, pid_t *pid_tab)
 	i = 0;
 	while (i < (*philo).total_philos && (*philo).pid_tab[i] != 0)
 	{
+		printf("killed child %d\n", i);
 		kill(pid_tab[i], SIGKILL);
 		i++;
 	}
@@ -61,6 +62,7 @@ void	stop_simulation(t_philo *philo, pid_t *pid_tab)
 	while (i < (*philo).total_philos && (*philo).pid_tab[i] != 0)
 	{
 		waitpid(pid_tab[i], NULL, 0);
+		printf("waited child %d\n", i);
 		i++;
 	}
 	close_sem(philo, philo->total_philos);

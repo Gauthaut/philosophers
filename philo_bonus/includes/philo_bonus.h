@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/23 01:55:28 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/24 02:10:46 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # define EAT "is eating\n"
 # define SLEEP "is sleeping\n"
 # define THINK "is thinking\n"
-# define DEAD "%ld %d is dead\n"
+# define DEAD "died\n"
 # define MERROR "mutex initialisation error\n"
 
 # define RED "\x1b[31m"
@@ -51,6 +51,7 @@
 # define FSEM "/fork_semaphore"
 # define PSEM "/print_semaphore"
 # define SSEM "/stop_simulation_semaphore"
+# define WSEM "/waiter_simulation"
 
 typedef struct s_philo
 {
@@ -68,7 +69,7 @@ typedef struct s_philo
 	sem_t		*forks;
 	sem_t		*print;
 	sem_t		*stop_simulation_sem;
-	sem_t		**waiter;
+	sem_t		*waiter;
 	sem_t		**child_monitor;
 	pthread_t	monitor_thread;
 	pid_t		*pid_tab;
@@ -86,7 +87,8 @@ bool			cant_init_semaphore(t_philo *philo);
 bool			philo_ate_enough(t_philo *philo);
 bool			philo_is_dead(t_philo *philo);
 void			stop_simulation(t_philo *philo, pid_t *pid_tab);
-void			destroy_sem(t_philo *philo, int last_index);
+void			close_sem(t_philo *philo, int last_index);
+void			unlink_sem(t_philo *philo, int last_index);
 
 /* ACTIONS */
 

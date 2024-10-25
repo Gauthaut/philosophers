@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 20:41:09 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/23 07:47:05 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/23 22:18:32 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ bool	philo_cant_eat(t_philo *philo)
 	sem_post(philo->print);
 	sem_wait(philo->forks);
 	sem_wait(philo->print);
-	print(EAT, GREY, philo);
+	print(FORK, GREY, philo);
 	print(EAT, YELLOW, philo);
 	sem_post(philo->print);
 	usleep(philo->time_to_eat);
@@ -47,6 +47,9 @@ bool	philo_cant_sleep(t_philo *philo)
 		return (true);
 	}
 	sem_post(philo->child_monitor[philo->id]);
+	sem_wait(philo->print);
+	print(SLEEP, BLUE, philo);
+	sem_post(philo->print);
 	usleep(philo->time_to_sleep);
 	return (false);
 }
