@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/25 03:40:56 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/28 17:45:46 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ bool	cant_run_philo(t_philo *philo)
 	pid_tab = malloc(sizeof(pid_t) * (philo->total_philos));
 	if (!pid_tab)
 		return (free((*philo).child_monitor), free((*philo).waiter), true);
-	i = 0;
+	i = -1;
 	memset(pid_tab, 0, sizeof(pid_t) * (*philo).total_philos);
 	(*philo).start_time = get_time();
 	(*philo).last_meal_time = (*philo).start_time;
-	while (i < (*philo).total_philos)
+	while (++i < (*philo).total_philos)
 	{
 		(*philo).id = i;
 		pid_tab[i] = fork();
@@ -84,8 +84,6 @@ bool	cant_run_philo(t_philo *philo)
 			return (stop_simulation(philo, pid_tab), free(pid_tab), true);
 		if (pid_tab[i] == 0)
 			exec_child(philo);
-		else
-			i++;
 	}
 	stop_simulation(philo, pid_tab);
 	free(pid_tab);
