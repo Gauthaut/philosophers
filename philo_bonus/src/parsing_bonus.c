@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 17:01:15 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/25 03:29:40 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/30 19:31:08 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool	arguments_are_not_valid(int ac, char **av)
 void	init_philo(t_philo *philo, int ac, char **av)
 {
 	(*philo).total_philos = ft_atoi(av[1]);
-	(*philo).time_to_die = ft_atoi(av[2]) * 1000;
+	(*philo).time_to_die = ft_atoi(av[2]);
 	(*philo).time_to_eat = ft_atoi(av[3]) * 1000;
 	(*philo).time_to_sleep = ft_atoi(av[4]) * 1000;
 	(*philo).time_to_think = 0;
@@ -81,7 +81,6 @@ bool	cant_init_semaphore(t_philo *philo)
 	int	i;
 
 	unlink_sem(philo, philo->total_philos);
-
 	(*philo).child_monitor = malloc(sizeof(sem_t *) * (*philo).total_philos);
 	if (!(*philo).child_monitor)
 		return (true);
@@ -91,9 +90,11 @@ bool	cant_init_semaphore(t_philo *philo)
 		(*philo).child_monitor[i] = sem_open(get_sem_name(philo, '/', i),
 				O_CREAT, 0644, 1);
 	}
-	(*philo).waiter = sem_open(WSEM, O_CREAT, 0666, 1);
+	(*philo).waiter = sem_open(WSEM, O_CREAT, 0666, (*philo).total_philos / 2);
 	(*philo).forks = sem_open(FSEM, O_CREAT, 0644, (*philo).total_philos);
 	(*philo).print = sem_open(PSEM, O_CREAT, 0644, 1);
 	(*philo).stop_simulation_sem = sem_open(SSEM, O_CREAT, 0644, 0);
+	if (philo->number_of_meal != -1)
+		(*philo).meal_counter = sem_open(MSEM, O_CREAT, 0644, 0);
 	return (false);
 }

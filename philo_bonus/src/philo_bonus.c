@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/28 17:45:46 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/30 20:35:40 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,23 @@ bool	cant_init_philo(t_philo *philosophers, int ac, char **av)
 void	*monitor(void *args)
 {
 	t_philo	*philo;
+	long	last_meal;
 
 	philo = (t_philo *)args;
 	while (1)
 	{
-		if (philo_is_dead(philo))
+		sem_wait(philo->child_monitor[philo->id]);
+		last_meal = get_time() - philo->last_meal_time;
+		sem_post(philo->child_monitor[philo->id]);
+		if (last_meal > philo->time_to_die)
 		{
 			sem_wait(philo->print);
 			print(DEAD, RED, philo);
 			sem_post(philo->stop_simulation_sem);
-			return (NULL);
-		}
-		if (philo_ate_enough(philo))
 			break ;
+		}
 		usleep(1000);
 	}
-	sem_wait(philo->child_monitor[philo->id]);
-	philo->child_must_stop = 1;
-	sem_post(philo->child_monitor[philo->id]);
 	return (NULL);
 }
 
@@ -71,7 +70,7 @@ bool	cant_run_philo(t_philo *philo)
 
 	pid_tab = malloc(sizeof(pid_t) * (philo->total_philos));
 	if (!pid_tab)
-		return (free((*philo).child_monitor), free((*philo).waiter), true);
+		return (free((*philo).child_monitor), true);
 	i = -1;
 	memset(pid_tab, 0, sizeof(pid_t) * (*philo).total_philos);
 	(*philo).start_time = get_time();
@@ -81,19 +80,20 @@ bool	cant_run_philo(t_philo *philo)
 		(*philo).id = i;
 		pid_tab[i] = fork();
 		if (pid_tab[i] < 0)
-			return (stop_simulation(philo, pid_tab), free(pid_tab), true);
+			return (stop_simulation(philo, pid_tab), true);
 		if (pid_tab[i] == 0)
 			exec_child(philo);
 	}
+	if (cant_run_meal_monitor(philo))
+		return (stop_simulation(philo, pid_tab), true);
 	stop_simulation(philo, pid_tab);
-	free(pid_tab);
 	return (false);
 }
 
 int	main(int ac, char **av)
 {
-	t_philo philosophers;
-	int i;
+	t_philo	philosophers;
+	int		i;
 
 	i = 0;
 	if (cant_init_philo(&philosophers, ac, av))

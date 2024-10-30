@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 20:41:09 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/23 22:18:32 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/28 19:22:56 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,13 @@ bool	philo_cant_eat(t_philo *philo)
 	print(FORK, GREY, philo);
 	print(EAT, YELLOW, philo);
 	sem_post(philo->print);
+	philo->last_meal_time = get_time();
 	usleep(philo->time_to_eat);
-	sem_post(philo->forks);
-	sem_post(philo->forks);
+	(sem_post(philo->forks), sem_post(philo->forks));
 	sem_post(philo->waiter);
+	philo->time_eaten++;
+	if (philo->time_eaten == philo->number_of_meal)
+		sem_post(philo->meal_counter);
 	return (false);
 }
 

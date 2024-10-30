@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 02:45:00 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/28 17:46:07 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/30 21:57:03 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	unlink_sem(t_philo *philo, int last_index)
 		i++;
 	}
 }
+
 void	close_sem(t_philo *philo, int last_index)
 {
 	char	*str;
@@ -52,13 +53,13 @@ void	stop_simulation(t_philo *philo, pid_t *pid_tab)
 
 	sem_wait(philo->stop_simulation_sem);
 	i = 0;
-	while (pid_tab[i] != 0 && i < (*philo).total_philos)
+	while (i < (*philo).total_philos && pid_tab[i] != 0)
 	{
 		kill(pid_tab[i], SIGKILL);
 		i++;
 	}
 	i = 0;
-	while (pid_tab[i] != 0 && i < (*philo).total_philos)
+	while (i < (*philo).total_philos && pid_tab[i] != 0)
 	{
 		waitpid(pid_tab[i], NULL, 0);
 		i++;
@@ -66,30 +67,31 @@ void	stop_simulation(t_philo *philo, pid_t *pid_tab)
 	close_sem(philo, philo->total_philos);
 	unlink_sem(philo, philo->total_philos);
 	free(philo->child_monitor);
+	free(pid_tab);
 }
 
-bool	philo_is_dead(t_philo *philo)
+void	*meal_monitor(void *args)
 {
-	long	last_meal;
+	t_philo	*philo;
+	int		i;
 
-	sem_wait(philo->child_monitor[philo->id]);
-	last_meal = get_time() - philo->last_meal_time;
-	sem_post(philo->child_monitor[philo->id]);
-	if (last_meal > philo->time_to_die)
-		return (true);
-	return (false);
+	philo = (t_philo *)args;
+	i = 0;
+	while (i < philo->total_philos)
+	{
+		sem_wait(philo->meal_counter);
+		i++;
+	}
+	sem_post(philo->stop_simulation_sem);
+	return (NULL);
 }
 
-bool	philo_ate_enough(t_philo *philo)
+bool	cant_run_meal_monitor(t_philo *philo)
 {
-	int time_eaten;
-
 	if (philo->number_of_meal == -1)
 		return (false);
-	sem_wait(philo->child_monitor[philo->id]);
-	time_eaten = philo->time_eaten;
-	sem_post(philo->child_monitor[philo->id]);
-	if (time_eaten >= philo->number_of_meal)
+	if (pthread_create(&philo->meal_monitor, NULL, meal_monitor, philo) != 0)
 		return (true);
+	pthread_detach(philo->meal_monitor);
 	return (false);
 }
