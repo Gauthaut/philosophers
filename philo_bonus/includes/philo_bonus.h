@@ -6,12 +6,12 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/24 02:10:46 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/10/30 22:34:47 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
 # include <fcntl.h>
 # include <pthread.h>
@@ -52,6 +52,7 @@
 # define PSEM "/print_semaphore"
 # define SSEM "/stop_simulation_semaphore"
 # define WSEM "/waiter_simulation"
+# define MSEM "/meal_counter_sem"
 
 typedef struct s_philo
 {
@@ -71,7 +72,9 @@ typedef struct s_philo
 	sem_t		*stop_simulation_sem;
 	sem_t		*waiter;
 	sem_t		**child_monitor;
+	sem_t		*meal_counter;
 	pthread_t	monitor_thread;
+	pthread_t	meal_monitor;
 	pid_t		*pid_tab;
 }				t_philo;
 
@@ -84,16 +87,14 @@ bool			cant_init_semaphore(t_philo *philo);
 
 /* MONITEUR */
 
-bool			philo_ate_enough(t_philo *philo);
-bool			philo_is_dead(t_philo *philo);
+void			*meal_monitor(void *args);
+bool			cant_run_meal_monitor(t_philo *philo);
 void			stop_simulation(t_philo *philo, pid_t *pid_tab);
 void			close_sem(t_philo *philo, int last_index);
 void			unlink_sem(t_philo *philo, int last_index);
 
 /* ACTIONS */
 
-void			take_fork(t_philo *philo);
-void			drop_the_fork(t_philo *philo);
 bool			philo_cant_eat(t_philo *philo);
 bool			philo_cant_sleep(t_philo *philo);
 bool			philo_cant_think(t_philo *philo);
