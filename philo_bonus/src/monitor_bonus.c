@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 02:45:00 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/11/02 01:41:05 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/11/02 02:15:03 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	unlink_sem(t_philo *philo, int last_index)
 	sem_unlink(PSEM);
 	sem_unlink(SSEM);
 	sem_unlink(WSEM);
+	sem_unlink(MSEM);
 	while (i < last_index)
 	{
 		str = get_sem_name(philo, '/', i);
@@ -40,6 +41,8 @@ void	close_sem(t_philo *philo, int last_index)
 	sem_close(philo->print);
 	sem_close(philo->stop_simulation_sem);
 	sem_close(philo->waiter);
+	if (philo->number_of_meal != -1)
+		sem_close(philo->meal_counter);
 	while (i < last_index)
 	{
 		sem_close(philo->child_monitor[i]);
