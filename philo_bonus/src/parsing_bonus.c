@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: legoat <legoat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 17:01:15 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/30 19:31:08 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/03 04:45:58 by legoat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ bool	arguments_are_not_valid(int ac, char **av)
 	return (false);
 }
 
-void	init_philo(t_philo *philo, int ac, char **av)
+void	init_philo(t_philo *philo, char **av)
 {
 	(*philo).total_philos = ft_atoi(av[1]);
 	(*philo).time_to_die = ft_atoi(av[2]);
@@ -52,7 +52,7 @@ void	init_philo(t_philo *philo, int ac, char **av)
 	(*philo).child_must_stop = 0;
 }
 
-char	*get_sem_name(t_philo *philo, char type, int index)
+char	*get_sem_name(char type, int index)
 {
 	static char	str[6] = {0};
 	int			i;
@@ -80,14 +80,14 @@ bool	cant_init_semaphore(t_philo *philo)
 {
 	int	i;
 
-	unlink_sem(philo, philo->total_philos);
+	unlink_sem(philo->total_philos);
 	(*philo).child_monitor = malloc(sizeof(sem_t *) * (*philo).total_philos);
 	if (!(*philo).child_monitor)
 		return (true);
 	i = -1;
 	while (++i < (*philo).total_philos)
 	{
-		(*philo).child_monitor[i] = sem_open(get_sem_name(philo, '/', i),
+		(*philo).child_monitor[i] = sem_open(get_sem_name('/', i),
 				O_CREAT, 0644, 1);
 	}
 	(*philo).waiter = sem_open(WSEM, O_CREAT, 0666, (*philo).total_philos / 2);

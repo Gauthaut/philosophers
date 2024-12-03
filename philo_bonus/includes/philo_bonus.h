@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: legoat <legoat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/30 22:34:47 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/03 04:45:42 by legoat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ typedef struct s_philo
 /* PARSING */
 
 bool			arguments_are_not_valid(int ac, char **av);
-void			init_philo(t_philo *philo, int ac, char **av);
-char			*get_sem_name(t_philo *philo, char type, int index);
+void			init_philo(t_philo *philo, char **av);
+char			*get_sem_name(char type, int index);
 bool			cant_init_semaphore(t_philo *philo);
 
 /* MONITEUR */
@@ -91,7 +91,7 @@ void			*meal_monitor(void *args);
 bool			cant_run_meal_monitor(t_philo *philo);
 void			stop_simulation(t_philo *philo, pid_t *pid_tab);
 void			close_sem(t_philo *philo, int last_index);
-void			unlink_sem(t_philo *philo, int last_index);
+void			unlink_sem(int last_index);
 
 /* ACTIONS */
 

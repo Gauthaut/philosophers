@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   monitor_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: legoat <legoat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 02:45:00 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/11/02 02:15:03 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/03 04:45:16 by legoat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
 
-void	unlink_sem(t_philo *philo, int last_index)
+void	unlink_sem(int last_index)
 {
 	char	*str;
 	int		i;
@@ -25,7 +25,7 @@ void	unlink_sem(t_philo *philo, int last_index)
 	sem_unlink(MSEM);
 	while (i < last_index)
 	{
-		str = get_sem_name(philo, '/', i);
+		str = get_sem_name('/', i);
 		sem_unlink(str);
 		i++;
 	}
@@ -33,7 +33,6 @@ void	unlink_sem(t_philo *philo, int last_index)
 
 void	close_sem(t_philo *philo, int last_index)
 {
-	char	*str;
 	int		i;
 
 	i = 0;
@@ -68,7 +67,7 @@ void	stop_simulation(t_philo *philo, pid_t *pid_tab)
 		i++;
 	}
 	close_sem(philo, philo->total_philos);
-	unlink_sem(philo, philo->total_philos);
+	unlink_sem(philo->total_philos);
 	free(philo->child_monitor);
 	free(pid_tab);
 }

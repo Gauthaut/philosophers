@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: legoat <legoat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/11/02 01:41:04 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/03 04:46:23 by legoat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ bool	cant_init_philo(t_philo *philosophers, int ac, char **av)
 {
 	if (arguments_are_not_valid(ac, av))
 		return (printf(RED "arguments not valids\n" RESET));
-	init_philo(philosophers, ac, av);
+	init_philo(philosophers, av);
 	if (cant_init_semaphore(philosophers))
 		return (true);
 	return (false);
@@ -93,9 +93,7 @@ bool	cant_run_philo(t_philo *philo)
 int	main(int ac, char **av)
 {
 	t_philo	philosophers;
-	int		i;
 
-	i = 0;
 	if (cant_init_philo(&philosophers, ac, av))
 		return (printf(RED "can't init philos\n" RESET));
 	if (cant_run_philo(&philosophers))
