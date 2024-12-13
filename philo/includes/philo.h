@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/29 21:07:43 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/13 01:02:12 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-// # define FORK "has taken a fork 🍴\n"
-// # define EAT "is eating 🍝\n"
-// # define SLEEP "is sleeping 🌙\n"
-// # define THINK "is thinking 🤔\n"
-// # define DEAD "%ld %d is dead 💀\n"
-// # define MERROR "mutex initialisation error\n"
+# define RED "\x1b[37m"
+# define GREEN "\x1b[37m"
+# define BLUE "\x1b[37m"
+# define VIOLET "\x1b[37m"
+# define GREY "\x1b[37m"
+# define YELLOW "\x1b[37m"
+# define RESET "\x1b[37m"
 
 # define FORK "has taken a fork\n"
 # define EAT "is eating\n"
@@ -35,13 +36,20 @@
 # define DEAD "%ld %d is dead\n"
 # define MERROR "mutex initialisation error\n"
 
-# define RED "\x1b[31m"
-# define GREEN "\x1b[32m"
-# define BLUE "\x1b[34m"
-# define VIOLET "\x1b[35m"
-# define GREY "\x1b[90m"
-# define YELLOW "\x1b[33m"
-# define RESET "\x1b[0m"
+// # define FORK "has taken a fork 🍴\n"
+// # define EAT "is eating 🍝\n"
+// # define SLEEP "is sleeping 🌙\n"
+// # define THINK "is thinking 🤔\n"
+// # define DEAD "%ld %d is dead 💀\n"
+// # define MERROR "mutex initialisation error\n"
+
+// # define RED "\x1b[31m"
+// # define GREEN "\x1b[32m"
+// # define BLUE "\x1b[34m"
+// # define VIOLET "\x1b[35m"
+// # define GREY "\x1b[90m"
+// # define YELLOW "\x1b[33m"
+// # define RESET "\x1b[0m"
 
 typedef struct s_philo
 {
