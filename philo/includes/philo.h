@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/14 06:52:32 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 08:45:37 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ bool							philo_cant_think(t_philo *philo);
 
 /* UTILS */
 
-int								ft_atoi(char *str);
+int								ft_atol(char *str);
 long							get_time(void);
 void							print(char *str, char *color, t_philo *philo);
 bool							philo_is_dead(t_philo *philo);

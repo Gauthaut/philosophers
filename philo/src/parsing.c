@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 17:01:15 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/14 07:32:43 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 08:53:09 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@ bool	arguments_are_not_valid(int ac, char **av)
 	int	j;
 
 	i = 1;
-	if ((ac != 5 && ac != 6) || ft_atoi(av[1]) == 0)
+	if ((ac != 5 && ac != 6) || ft_atol(av[1]) == 0)
 		return (true);
 	while (av[i])
 	{
+		if (atol(av[i]) > 2147483647 || atol(av[i]) < -2147483648)
 		j = 0;
 		while (av[i][j])
 		{
@@ -57,13 +58,13 @@ t_philo	*new_philo(char **av, int i, t_shared_ressources *r)
 	if (!philo)
 		return (NULL);
 	philo->id = i;
-	philo->total_philo = ft_atoi(av[1]);
-	philo->time_to_die = ft_atoi(av[2]);
-	philo->time_to_eat = ft_atoi(av[3]);
-	philo->time_to_sleep = ft_atoi(av[4]);
+	philo->total_philo = ft_atol(av[1]);
+	philo->time_to_die = ft_atol(av[2]);
+	philo->time_to_eat = ft_atol(av[3]);
+	philo->time_to_sleep = ft_atol(av[4]);
 	philo->number_of_meal = -1;
 	if (av[5])
-		philo->number_of_meal = ft_atoi(av[5]);
+		philo->number_of_meal = ft_atol(av[5]);
 	philo->time_to_think = 0;
 	if (philo->total_philo % 2)
 		philo->time_to_think = philo->time_to_die * 0.9;

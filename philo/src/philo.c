@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/14 08:24:00 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 08:54:03 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	cant_init_philo(int ac, char **av, t_philo **philosophers)
 		return (true);
 	i = -1;
 	*philosophers = NULL;
-	while (++i < ft_atoi(av[1]))
+	while (++i < ft_atol(av[1]))
 	{
 		temp = new_philo(av, i, r);
 		if (!temp)

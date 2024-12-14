@@ -6,16 +6,16 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 02:30:45 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/14 08:23:03 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 08:46:13 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	ft_atoi(char *str)
+int	ft_atol(char *str)
 {
-	int	num;
-	int	i;
+	long	num;
+	long	i;
 
 	i = 0;
 	num = 0;
