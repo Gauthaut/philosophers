@@ -6,11 +6,34 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:56:29 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/14 06:22:21 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 08:31:59 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void	ft_usleep(int time_to_usleep, t_philo *philo)
+{
+	long	start_time;
+
+	start_time = get_time();
+	while ((get_time() - start_time) * 1000 < time_to_usleep)
+	{
+		pthread_mutex_lock(&philo->ressources->stop_mutex);
+		if (philo_is_dead(philo))
+		{
+			philo->is_dead = 1;
+			pthread_mutex_unlock(&philo->ressources->stop_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(&philo->ressources->stop_mutex);
+		usleep(50);
+	}
+	pthread_mutex_lock(&philo->ressources->stop_mutex);
+	if (philo_is_dead(philo))
+		philo->is_dead = 1;
+	pthread_mutex_unlock(&philo->ressources->stop_mutex);
+}
 
 void	free_philo(t_philo *philo)
 {

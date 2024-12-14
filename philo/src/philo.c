@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/14 06:08:38 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 08:24:00 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ bool	cant_init_philo(int ac, char **av, t_philo **philosophers)
 	{
 		temp = new_philo(av, i, r);
 		if (!temp)
-			return (free (r), clean_exit(*philosophers, 0, 0), true);
+			return (free(r), clean_exit(*philosophers, 0, 0), true);
 		add_back_philo(philosophers, temp);
 	}
 	temp->next = *philosophers;
 	if (cant_init_mutex(philosophers))
-		return (free (r), printf(RED "%s" RESET, MERROR), true);
+		return (free(r), printf(RED "%s" RESET, MERROR), true);
 	return (false);
 }
 
@@ -70,8 +70,11 @@ bool	cant_run_simulation(t_philo **philosophers)
 		philo->last_meal = start;
 		if (pthread_create(&philo->philo, NULL, routine, philo) != 0)
 		{
+			pthread_mutex_lock(&philo->ressources->print_mutex);
 			printf("thread initialisation error\n");
-			return (free (philo->ressources), clean_exit(*philosophers, philo->id, 2), true);
+			pthread_mutex_unlock(&philo->ressources->print_mutex);
+			return (free(philo->ressources), clean_exit(*philosophers,
+					philo->id, 2), true);
 		}
 		if (philo->id == philo->total_philo - 1)
 			return (false);
@@ -81,7 +84,8 @@ bool	cant_run_simulation(t_philo **philosophers)
 
 void	monitor(t_philo **philosophers)
 {
-	t_philo	*philo;
+	t_shared_ressources	*temp;
+	t_philo				*philo;
 
 	philo = *philosophers;
 	while (1)
@@ -95,11 +99,15 @@ void	monitor(t_philo **philosophers)
 	pthread_mutex_lock(&philo->ressources->stop_mutex);
 	philo->ressources->simulation_must_stop = 1;
 	pthread_mutex_unlock(&philo->ressources->stop_mutex);
-	join_threads(*philosophers, philo->total_philo);
+	pthread_mutex_lock(&philo->ressources->stop_mutex);
+	pthread_mutex_lock(&philo->ressources->print_mutex);
 	if (philo->is_dead)
 		printf(RED DEAD RESET, get_time() - philo->start_time, philo->id + 1);
-	clean_exit( *philosophers, philo->total_philo, 1);
-	free (philo->ressources);
+	pthread_mutex_unlock(&philo->ressources->print_mutex);
+	pthread_mutex_unlock(&philo->ressources->stop_mutex);
+	temp = philo->ressources;
+	clean_exit(*philosophers, philo->total_philo, 2);
+	free(temp);
 }
 
 int	main(int ac, char **av)

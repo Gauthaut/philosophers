@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/14 05:43:04 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 06:52:32 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,22 +81,24 @@ typedef struct s_shared_ressources
 	int							time_eaten;
 }								t_shared_ressources;
 
-	/* PARSING */
+/* PARSING */
 
 bool							arguments_are_not_valid(int ac, char **av);
 t_shared_ressources				*create_shared_ressources(void);
-t_philo							*new_philo(char **av, int i, t_shared_ressources *r);
+t_philo							*new_philo(char **av, int i,
+									t_shared_ressources *r);
 void							add_back_philo(t_philo **philo, t_philo *new);
 bool							cant_init_mutex(t_philo **philosophers);
 
-	/* EXIT */
+/* EXIT */
 
 void							free_philo(t_philo *philo);
 void							join_threads(t_philo *philo, int last_id);
 void							destroy_mutexes(t_philo *philo, int last_id);
 void							clean_exit(t_philo *philos, int last_id, int f);
+void							ft_usleep(int time_to_usleep, t_philo *philo);
 
-	/* ACTIONS */
+/* ACTIONS */
 
 void							take_forks(t_philo *philo);
 void							drop_the_forks(t_philo *philo);
@@ -104,7 +106,7 @@ bool							philo_cant_eat(t_philo *philo);
 bool							philo_cant_sleep(t_philo *philo);
 bool							philo_cant_think(t_philo *philo);
 
-	/* UTILS */
+/* UTILS */
 
 int								ft_atoi(char *str);
 long							get_time(void);
