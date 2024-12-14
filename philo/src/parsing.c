@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 17:01:15 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/13 22:06:08 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 06:10:26 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_shared_ressources	*create_shared_ressources(void)
 	return (r);
 }
 
-t_philo	*new_philo(char **av, int i)
+t_philo	*new_philo(char **av, int i, t_shared_ressources *r)
 {
 	t_philo	*philo;
 
@@ -69,6 +69,7 @@ t_philo	*new_philo(char **av, int i)
 		philo->time_to_think = philo->time_to_die * 0.9;
 	philo->is_dead = 0;
 	philo->next = NULL;
+	philo->ressources = r;
 	return (philo);
 }
 

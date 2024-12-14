@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:56:29 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/09/27 03:51:43 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 06:22:21 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	free_philo(t_philo *philo)
 {
-	if (!philo)
-		return ;
 	if (philo->id != philo->total_philo - 1 && philo->next)
 		free_philo(philo->next);
 	free(philo);
@@ -58,6 +56,6 @@ void	clean_exit(t_philo *philosophers, int last_id, int flag)
 		join_threads(philosophers, last_id);
 	if (flag >= 1)
 		destroy_mutexes(philosophers, last_id);
-	free(philosophers->ressources);
-	free_philo(philosophers);
+	if (philosophers)
+		free_philo(philosophers);
 }

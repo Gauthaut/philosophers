@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/13 22:54:28 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 06:08:38 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,14 @@ bool	cant_init_philo(int ac, char **av, t_philo **philosophers)
 	*philosophers = NULL;
 	while (++i < ft_atoi(av[1]))
 	{
-		temp = new_philo(av, i);
+		temp = new_philo(av, i, r);
 		if (!temp)
-			return (clean_exit(*philosophers, 0, 0), true);
-		temp->ressources = r;
+			return (free (r), clean_exit(*philosophers, 0, 0), true);
 		add_back_philo(philosophers, temp);
 	}
 	temp->next = *philosophers;
 	if (cant_init_mutex(philosophers))
-		return (printf(RED "%s" RESET, MERROR), true);
+		return (free (r), printf(RED "%s" RESET, MERROR), true);
 	return (false);
 }
 
@@ -72,7 +71,7 @@ bool	cant_run_simulation(t_philo **philosophers)
 		if (pthread_create(&philo->philo, NULL, routine, philo) != 0)
 		{
 			printf("thread initialisation error\n");
-			return (clean_exit(*philosophers, philo->id, 2), true);
+			return (free (philo->ressources), clean_exit(*philosophers, philo->id, 2), true);
 		}
 		if (philo->id == philo->total_philo - 1)
 			return (false);
@@ -99,7 +98,8 @@ void	monitor(t_philo **philosophers)
 	join_threads(*philosophers, philo->total_philo);
 	if (philo->is_dead)
 		printf(RED DEAD RESET, get_time() - philo->start_time, philo->id + 1);
-	clean_exit(*philosophers, philo->total_philo, 1);
+	clean_exit( *philosophers, philo->total_philo, 1);
+	free (philo->ressources);
 }
 
 int	main(int ac, char **av)

@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/13 01:02:12 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/14 05:43:04 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ typedef struct s_shared_ressources
 
 bool							arguments_are_not_valid(int ac, char **av);
 t_shared_ressources				*create_shared_ressources(void);
-t_philo							*new_philo(char **av, int i);
+t_philo							*new_philo(char **av, int i, t_shared_ressources *r);
 void							add_back_philo(t_philo **philo, t_philo *new);
 bool							cant_init_mutex(t_philo **philosophers);
 
