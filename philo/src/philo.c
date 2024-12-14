@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/13 22:08:55 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/13 22:54:28 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	main(int ac, char **av)
 	t_philo	*philosophers;
 
 	if (cant_init_philo(ac, av, &philosophers))
-		return (printf(RED "can't init philos 💀\n" RESET));
+		return (printf(RED "can't init philos\n" RESET));
 	if (cant_run_simulation(&philosophers))
 		return (1);
 	monitor(&philosophers);
