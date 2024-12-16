@@ -23,6 +23,7 @@ bool	arguments_are_not_valid(int ac, char **av)
 	while (av[i])
 	{
 		if (atol(av[i]) > 2147483647 || atol(av[i]) < -2147483648)
+			return (true);
 		j = 0;
 		while (av[i][j])
 		{
