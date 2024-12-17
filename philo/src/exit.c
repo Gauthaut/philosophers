@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:56:29 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/16 22:53:23 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/17 02:24:35 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_usleep(int time_to_usleep, t_philo *philo)
 			break ;
 		}
 		pthread_mutex_unlock(&philo->ressources->stop_mutex);
-		usleep(50);
+		usleep(500);
 	}
 	pthread_mutex_lock(&philo->ressources->stop_mutex);
 	if (philo_is_dead(philo))

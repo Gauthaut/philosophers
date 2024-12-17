@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 17:01:15 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/17 00:45:33 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/17 02:35:36 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,6 @@ t_philo	*new_philo(char **av, int i, t_shared_ressources *r)
 	philo->number_of_meal = -1;
 	if (av[5])
 		philo->number_of_meal = ft_atol(av[5]);
-	philo->time_to_think = 100;
-	if (philo->total_philo % 2)
-	philo->time_to_think = (philo->time_to_die - (philo->time_to_eat
-				+ philo->time_to_sleep)) / 2;
 	philo->is_dead = 0;
 	philo->next = NULL;
 	philo->ressources = r;

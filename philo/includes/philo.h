@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/14 08:45:37 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/17 02:35:45 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef struct s_philo
 	int							time_to_die;
 	int							time_to_eat;
 	int							time_to_sleep;
-	int							time_to_think;
 	int							number_of_meal;
 	long						last_meal;
 	long						start_time;

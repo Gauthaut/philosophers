@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 03:26:35 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/17 00:32:11 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/17 02:34:38 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,5 @@ bool	philo_cant_think(t_philo *philo)
 	}
 	pthread_mutex_unlock(&philo->ressources->stop_mutex);
 	print(THINK, GREEN, philo);
-	if (philo->time_to_think)
-		ft_usleep(philo->time_to_think * 1000, philo);
 	return (false);
 }
