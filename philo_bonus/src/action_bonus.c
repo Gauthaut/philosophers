@@ -31,7 +31,9 @@ bool	philo_cant_eat(t_philo *philo)
 	print(FORK, GREY, philo);
 	print(EAT, YELLOW, philo);
 	sem_post(philo->print);
+	sem_wait(philo->child_monitor[philo->id]);
 	philo->last_meal_time = get_time();
+	sem_post(philo->child_monitor[philo->id]);
 	usleep(philo->time_to_eat);
 	(sem_post(philo->forks), sem_post(philo->forks));
 	sem_post(philo->waiter);
