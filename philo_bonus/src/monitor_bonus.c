@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 02:45:00 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/18 00:56:18 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/18 06:46:55 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,20 @@ void	close_sem(t_philo *philo, int last_index)
 	}
 }
 
-void	stop_simulation(t_philo *philo, pid_t *pid_tab)
+void	stop_simulation(t_philo *philo, pid_t *pid_tab, int flag)
 {
 	int	i;
 
-	sem_wait(philo->stop_simulation_sem);
 	i = 0;
-	while (i < (*philo).total_philos && pid_tab[i] != 0)
+	while (flag && i < (*philo).total_philos && pid_tab[i] != 0)
 	{
 		kill(pid_tab[i], SIGKILL);
 		i++;
 	}
-	i = 0;
+	flag = 0;
 	while (i < (*philo).total_philos && pid_tab[i] != 0)
 	{
+		printf("waiting for %d\n", pid_tab[i]);
 		waitpid(pid_tab[i], NULL, 0);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 20:41:09 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/18 00:57:33 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/18 08:33:51 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,19 @@
 
 bool	philo_cant_eat(t_philo *philo)
 {
+	printf("here1\n");
 	sem_wait(philo->child_monitor[philo->id]);
 	if (philo->child_must_stop)
 	{
+		printf("here2\n");
 		sem_post(philo->child_monitor[philo->id]);
 		return (false);
 	}
+	printf("here3\n");
 	sem_post(philo->child_monitor[philo->id]);
+	printf("heeeere\n"); // dans le cas de 1 philo, il ne peut pas manger et le mon fait sortir ici
 	sem_wait(philo->waiter);
+	printf("heeeere\n"); // dans le cas de 1 philo, il ne peut pas manger et le mon fait sortir ici
 	sem_wait(philo->forks);
 	sem_wait(philo->print);
 	print(FORK, GREY, philo);
@@ -43,12 +48,15 @@ bool	philo_cant_eat(t_philo *philo)
 
 bool	philo_cant_sleep(t_philo *philo)
 {
+	printf("here4\n");
 	sem_wait(philo->child_monitor[philo->id]);
 	if (philo->child_must_stop)
 	{
+		printf("here5\n");
 		sem_post(philo->child_monitor[philo->id]);
 		return (true);
 	}
+	printf("here6\n");
 	sem_post(philo->child_monitor[philo->id]);
 	sem_wait(philo->print);
 	print(SLEEP, BLUE, philo);

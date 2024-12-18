@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/18 00:56:09 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/18 09:05:59 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ typedef struct s_philo
 	sem_t		**child_monitor;
 	sem_t		*meal_counter;
 	pthread_t	monitor_thread;
+	pthread_t	monitor_threadd;
+	pthread_t	monitor_threaddd	;
 	pthread_t	meal_monitor;
 	pid_t		*pid_tab;
 }				t_philo;
@@ -97,7 +99,7 @@ bool			cant_init_semaphore(t_philo *philo);
 
 void			*meal_monitor(void *args);
 bool			cant_run_meal_monitor(t_philo *philo);
-void			stop_simulation(t_philo *philo, pid_t *pid_tab);
+void			stop_simulation(t_philo *philo, pid_t *pid_tab, int flag);
 void			close_sem(t_philo *philo, int last_index);
 void			unlink_sem(int last_index);
 

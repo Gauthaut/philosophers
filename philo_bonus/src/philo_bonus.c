@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: legoat <legoat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/03 04:46:23 by legoat           ###   ########.fr       */
+/*   Updated: 2024/12/18 09:07:34 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,36 @@ bool	cant_init_philo(t_philo *philosophers, int ac, char **av)
 	return (false);
 }
 
+// le probleme ici est que le semaphore, simulation must stop bug.
+// donc je ne vais pas l utiliser.
+// la deuxieme solution est de faire en sorte que tout les processus
+// s'arretent en meme temps, et d'eux meme.
+// pour cela, lors de la mort d'un philosophe, on va envoyer un signal
+// en creant un thread qui va wait le print semaphore, qui est binaire.
+// Tout les philos vont bloques, et comme chaqe philo un moniteur qui
+// check automatiquement si le philo est mort, on va pouvoir arreter
+// tout les philos de cette maniere.
+
+void	*monitordd(void *args)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)args;
+	sem_wait(philo->print);
+	return (NULL);
+}
+
+void	*monitord(void *args)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)args;
+	sem_wait(philo->print);
+	print(DEAD, RED, philo);
+	sem_post(philo->print);
+	return (NULL);
+}
+
 void	*monitor(void *args)
 {
 	t_philo	*philo;
@@ -33,14 +63,19 @@ void	*monitor(void *args)
 		sem_wait(philo->child_monitor[philo->id]);
 		last_meal = get_time() - philo->last_meal_time;
 		sem_post(philo->child_monitor[philo->id]);
+		// printf("last_meal: %ld\n", last_meal);
 		if (last_meal > philo->time_to_die)
 		{
-			sem_wait(philo->print);
-			print(DEAD, RED, philo);
-			sem_post(philo->stop_simulation_sem);
-			break ;
+			pthread_create(&philo->monitor_threadd, NULL, monitord, philo);
+			pthread_detach(philo->monitor_threadd);
+			// pthread_create(&philo->monitor_threaddd, NULL, monitordd, philo);
+			// pthread_detach(philo->monitor_threaddd);
+			sem_wait(philo->child_monitor[philo->id]);
+			philo->child_must_stop = 1;
+			sem_post(philo->child_monitor[philo->id]);
+			return (NULL);
 		}
-		usleep(1000);
+		usleep(100);
 	}
 	return (NULL);
 }
@@ -52,14 +87,18 @@ void	exec_child(t_philo *philo)
 		usleep(200);
 	while (1)
 	{
+		// printf("ate\n");
 		if (philo_cant_eat(philo))
 			break ;
+		// printf("slept\n");
 		if (philo_cant_sleep(philo))
 			break ;
+		// printf("thought\n");
 		if (philo_cant_think(philo))
 			break ;
 	}
-	pthread_join(philo->monitor_thread, NULL);
+	pthread_join(philo->monitor_thread, NULL); // Attendre fin du monitor
+	printf("ok2\n");
 	exit(0);
 }
 
@@ -80,13 +119,13 @@ bool	cant_run_philo(t_philo *philo)
 		(*philo).id = i;
 		pid_tab[i] = fork();
 		if (pid_tab[i] < 0)
-			return (stop_simulation(philo, pid_tab), true);
+			return (stop_simulation(philo, pid_tab, 1), true);
 		if (pid_tab[i] == 0)
 			exec_child(philo);
 	}
 	if (cant_run_meal_monitor(philo))
-		return (stop_simulation(philo, pid_tab), true);
-	stop_simulation(philo, pid_tab);
+		return (stop_simulation(philo, pid_tab, 1), true);
+	stop_simulation(philo, pid_tab, 0);
 	return (false);
 }
 
