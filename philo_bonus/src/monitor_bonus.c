@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: legoat <legoat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 02:45:00 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/03 04:45:16 by legoat           ###   ########.fr       */
+/*   Updated: 2024/12/18 00:56:18 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	unlink_sem(int last_index)
 
 void	close_sem(t_philo *philo, int last_index)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	sem_close(philo->forks);
