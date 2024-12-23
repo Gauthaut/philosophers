@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 20:41:09 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/28 19:22:56 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/23 13:19:26 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,11 @@ bool	philo_cant_eat(t_philo *philo)
 		return (false);
 	}
 	sem_post(philo->child_monitor[philo->id]);
-	sem_wait(philo->waiter);
-	sem_wait(philo->forks);
+	(sem_wait(philo->waiter), sem_wait(philo->forks));
 	sem_wait(philo->print);
 	print(FORK, GREY, philo);
 	sem_post(philo->print);
-	sem_wait(philo->forks);
-	sem_wait(philo->print);
+	(sem_wait(philo->forks), sem_wait(philo->print));
 	print(FORK, GREY, philo);
 	print(EAT, YELLOW, philo);
 	sem_post(philo->print);
