@@ -2,7 +2,7 @@ NAME = philo_bonus
 SRC = src/action_bonus.c src/parsing_bonus.c src/philo_bonus.c src/utils.c src/monitor_bonus.c
 OBJ = $(SRC:.c=.o)
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3
 
 all: $(NAME)
 

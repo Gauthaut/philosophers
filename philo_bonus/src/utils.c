@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 02:30:45 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/10/30 22:00:04 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/23 12:45:19 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_atoi(char *str)
 
 int	ft_strlen(char *str)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -47,6 +47,13 @@ long	get_time(void)
 
 void	print(char *str, char *color, t_philo *philo)
 {
+	int	t;
+
+	sem_wait(philo->child_monitor[philo->id]);
+	t = philo->child_must_stop;
+	sem_post(philo->child_monitor[philo->id]);
+	if (t)
+		return ;
 	printf("%s%ld %d %s%s", color, get_time() - philo->start_time, philo->id
 		+ 1, str, RESET);
 }

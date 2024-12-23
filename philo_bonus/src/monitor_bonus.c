@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 02:45:00 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/23 11:08:44 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/23 12:37:40 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	stop_simulation(t_philo *philo, pid_t *pid_tab)
 	close_sem(philo, philo->total_philos);
 	unlink_sem(philo->total_philos);
 	free(philo->child_monitor);
-	free(pid_tab);
 }
 
 void	*meal_monitor(void *args)

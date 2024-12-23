@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/23 11:11:41 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/23 12:48:44 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	*run_philo(void *args)
 		if (philo_cant_think(philo))
 			break ;
 	}
-	exit(1);
 	return (NULL);
 }
 
@@ -60,19 +59,18 @@ void	exec_child(t_philo *philo)
 			break ;
 		}
 	}
+	close_sem(philo, philo->total_philos);
+	free(philo->child_monitor);
 	exit(1);
 }
 
 bool	cant_run_philo(t_philo *philo)
 {
-	pid_t	*pid_tab;
+	pid_t	pid_tab[200];
 	int		i;
 	int		status;
 
 	status = 0;
-	pid_tab = malloc(sizeof(pid_t) * (philo->total_philos));
-	if (!pid_tab)
-		return (free((*philo).child_monitor), true);
 	i = -1;
 	(*philo).start_time = get_time();
 	(*philo).last_meal_time = (*philo).start_time;
