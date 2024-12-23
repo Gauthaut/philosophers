@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/13 01:13:12 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/20 23:15:06 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@
 
 # define FSEM "/fork_semaphore"
 # define PSEM "/print_semaphore"
-# define SSEM "/stop_simulation_semaphore"
 # define WSEM "/waiter_simulation"
 # define MSEM "/meal_counter_sem"
 
@@ -77,7 +76,6 @@ typedef struct s_philo
 	int			child_must_stop;
 	sem_t		*forks;
 	sem_t		*print;
-	sem_t		*stop_simulation_sem;
 	sem_t		*waiter;
 	sem_t		**child_monitor;
 	sem_t		*meal_counter;

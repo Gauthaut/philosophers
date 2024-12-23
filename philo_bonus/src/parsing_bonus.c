@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: legoat <legoat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 17:01:15 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/03 04:45:58 by legoat           ###   ########.fr       */
+/*   Updated: 2024/12/20 23:13:02 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ bool	cant_init_semaphore(t_philo *philo)
 	(*philo).waiter = sem_open(WSEM, O_CREAT, 0666, (*philo).total_philos / 2);
 	(*philo).forks = sem_open(FSEM, O_CREAT, 0644, (*philo).total_philos);
 	(*philo).print = sem_open(PSEM, O_CREAT, 0644, 1);
-	(*philo).stop_simulation_sem = sem_open(SSEM, O_CREAT, 0644, 0);
 	if (philo->number_of_meal != -1)
 		(*philo).meal_counter = sem_open(MSEM, O_CREAT, 0644, 0);
 	return (false);

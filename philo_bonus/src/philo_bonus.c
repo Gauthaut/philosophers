@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: legoat <legoat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/03 04:46:23 by legoat           ###   ########.fr       */
+/*   Updated: 2024/12/23 09:22:01 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@ void	*monitor(void *args)
 		{
 			sem_wait(philo->print);
 			print(DEAD, RED, philo);
-			sem_post(philo->stop_simulation_sem);
-			break ;
+			sem_post(philo->print);
+			philo->child_must_stop = 1;
+			exit (1);
 		}
 		usleep(1000);
 	}
@@ -48,9 +49,10 @@ void	*monitor(void *args)
 void	exec_child(t_philo *philo)
 {
 	pthread_create(&philo->monitor_thread, NULL, monitor, philo);
+	pthread_detach(philo->monitor_thread);
 	if (philo->id % 2)
 		usleep(200);
-	while (1)
+	while (!philo->child_must_stop)
 	{
 		if (philo_cant_eat(philo))
 			break ;
@@ -59,20 +61,20 @@ void	exec_child(t_philo *philo)
 		if (philo_cant_think(philo))
 			break ;
 	}
-	pthread_join(philo->monitor_thread, NULL);
-	exit(0);
+	printf("child %d stopped\n", philo->id);
+	exit(1);
 }
 
 bool	cant_run_philo(t_philo *philo)
 {
 	pid_t	*pid_tab;
 	int		i;
+	int		status = 0;
 
 	pid_tab = malloc(sizeof(pid_t) * (philo->total_philos));
 	if (!pid_tab)
 		return (free((*philo).child_monitor), true);
 	i = -1;
-	memset(pid_tab, 0, sizeof(pid_t) * (*philo).total_philos);
 	(*philo).start_time = get_time();
 	(*philo).last_meal_time = (*philo).start_time;
 	while (++i < (*philo).total_philos)
@@ -86,6 +88,8 @@ bool	cant_run_philo(t_philo *philo)
 	}
 	if (cant_run_meal_monitor(philo))
 		return (stop_simulation(philo, pid_tab), true);
+	while (!status)
+		waitpid(-1, &status, 0);
 	stop_simulation(philo, pid_tab);
 	return (false);
 }
