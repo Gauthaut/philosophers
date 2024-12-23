@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/23 12:48:44 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/23 12:58:49 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	exec_child(t_philo *philo)
 			print(DEAD, RED, philo);
 			break ;
 		}
+		usleep(1000);
 	}
 	close_sem(philo, philo->total_philos);
 	free(philo->child_monitor);
