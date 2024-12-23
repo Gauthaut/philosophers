@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/23 09:22:01 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:11:41 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,34 +22,11 @@ bool	cant_init_philo(t_philo *philosophers, int ac, char **av)
 	return (false);
 }
 
-void	*monitor(void *args)
+void	*run_philo(void *args)
 {
 	t_philo	*philo;
-	long	last_meal;
 
 	philo = (t_philo *)args;
-	while (1)
-	{
-		sem_wait(philo->child_monitor[philo->id]);
-		last_meal = get_time() - philo->last_meal_time;
-		sem_post(philo->child_monitor[philo->id]);
-		if (last_meal > philo->time_to_die)
-		{
-			sem_wait(philo->print);
-			print(DEAD, RED, philo);
-			sem_post(philo->print);
-			philo->child_must_stop = 1;
-			exit (1);
-		}
-		usleep(1000);
-	}
-	return (NULL);
-}
-
-void	exec_child(t_philo *philo)
-{
-	pthread_create(&philo->monitor_thread, NULL, monitor, philo);
-	pthread_detach(philo->monitor_thread);
 	if (philo->id % 2)
 		usleep(200);
 	while (!philo->child_must_stop)
@@ -61,7 +38,28 @@ void	exec_child(t_philo *philo)
 		if (philo_cant_think(philo))
 			break ;
 	}
-	printf("child %d stopped\n", philo->id);
+	exit(1);
+	return (NULL);
+}
+
+void	exec_child(t_philo *philo)
+{
+	long	last_meal;
+
+	pthread_create(&philo->monitor_thread, NULL, run_philo, philo);
+	pthread_detach(philo->monitor_thread);
+	while (1)
+	{
+		sem_wait(philo->child_monitor[philo->id]);
+		last_meal = get_time() - philo->last_meal_time;
+		sem_post(philo->child_monitor[philo->id]);
+		if (last_meal > philo->time_to_die)
+		{
+			sem_wait(philo->print);
+			print(DEAD, RED, philo);
+			break ;
+		}
+	}
 	exit(1);
 }
 
@@ -69,8 +67,9 @@ bool	cant_run_philo(t_philo *philo)
 {
 	pid_t	*pid_tab;
 	int		i;
-	int		status = 0;
+	int		status;
 
+	status = 0;
 	pid_tab = malloc(sizeof(pid_t) * (philo->total_philos));
 	if (!pid_tab)
 		return (free((*philo).child_monitor), true);

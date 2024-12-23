@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 02:45:00 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/20 23:16:38 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/23 11:08:44 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ void	*meal_monitor(void *args)
 		sem_wait(philo->meal_counter);
 		i++;
 	}
+	sem_wait(philo->print);
 	exit (1);
+	return (NULL);
 }
 
 bool	cant_run_meal_monitor(t_philo *philo)
