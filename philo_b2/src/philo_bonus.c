@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2025/01/02 04:46:25 by gaperaud         ###   ########.fr       */
+/*   Updated: 2025/01/02 05:21:40 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,12 @@ void	exit_philo(t_philo *philo)
 		kill(philo->pid_tab[philo->id], SIGKILL);
 	if (philo->pid_tab)
 		free(philo->pid_tab);
-	if (philo->forks)
-	{
-		sem_close(philo->forks);
-		sem_unlink(FSEM);
-	}
-	if (philo->print)
-	{
-		sem_close(philo->print);
-		sem_unlink(PSEM);
-	}
-	if (philo->waiter)
-	{
-		sem_close(philo->waiter);
-		sem_unlink(WSEM);
-	}
+	sem_close(philo->forks);
+	sem_unlink(FSEM);
+	sem_close(philo->print);
+	sem_unlink(PSEM);
+	sem_close(philo->waiter);
+	sem_unlink(WSEM);
 	exit(philo->exit_value);
 }
 
@@ -49,6 +40,12 @@ void	init_philo(t_philo *philo, int ac, char **av)
 	philo->number_of_meal = -1;
 	if (ac == 6)
 		philo->number_of_meal = ft_atol(av[5]);
+	if (philo->total_philos == 1)
+	{
+		usleep(philo->time_to_die * 1000);
+		printf(RED "%d philo 1 died\n" RESET, philo->time_to_die + 1);
+		exit(0);
+	}
 	sem_unlink(WSEM);
 	philo->waiter = sem_open(WSEM, O_CREAT, 0666, philo->total_philos / 2);
 	sem_unlink(FSEM);
@@ -59,9 +56,6 @@ void	init_philo(t_philo *philo, int ac, char **av)
 	philo->exit_value = 0;
 	if (philo->waiter == SEM_FAILED || philo->forks == SEM_FAILED
 		|| philo->print == SEM_FAILED)
-		exit_philo(philo);
-	philo->pid_tab = malloc(sizeof(pid_t) * (philo->total_philos + 1));
-	if (!philo->pid_tab)
 		exit_philo(philo);
 }
 
@@ -100,6 +94,9 @@ void	run_philo(t_philo *philo)
 	int	i;
 
 	i = -1;
+	philo->pid_tab = malloc(sizeof(pid_t) * (philo->total_philos + 1));
+	if (!philo->pid_tab)
+		exit_philo(philo);
 	philo->start_time = get_time();
 	memset(philo->pid_tab, 0, sizeof(pid_t) * (philo->total_philos + 1));
 	while (++i < philo->total_philos)
