@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/23 12:58:49 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:43:43 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,12 @@ void	exec_child(t_philo *philo)
 		}
 		usleep(1000);
 	}
+	last_meal = 0;
+	while (last_meal < philo->id)
+	{
+		sem_post(philo->waiter);
+		last_meal++;
+	}
 	close_sem(philo, philo->total_philos);
 	free(philo->child_monitor);
 	exit(1);
@@ -96,6 +102,7 @@ int	main(int ac, char **av)
 {
 	t_philo	philosophers;
 
+	printf("philo_bonus\n");
 	if (cant_init_philo(&philosophers, ac, av))
 		return (printf(RED "can't init philos\n" RESET));
 	if (cant_run_philo(&philosophers))

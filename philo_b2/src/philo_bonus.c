@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2025/01/02 03:58:23 by gaperaud         ###   ########.fr       */
+/*   Updated: 2025/01/02 04:19:25 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,14 @@ void	init_philo(t_philo *philo, int ac, char **av)
 
 void	exec_child(t_philo *philo)
 {
-	while (philo->number_of_meal && get_time()
-		- philo->start_time < philo->time_to_die)
+	while (philo->number_of_meal)
 	{
-		philo->last_meal_time = get_time();
 		sem_wait(philo->waiter);
 		sem_wait(philo->forks);
+		print(FORK, GREY, philo);
 		sem_wait(philo->forks);
+		print(FORK, GREY, philo);
+		philo->last_meal_time = get_time();
 		print(EAT, YELLOW, philo);
 		ft_usleep(philo->time_to_eat, philo);
 		sem_post(philo->forks);
@@ -87,14 +88,8 @@ void	exec_child(t_philo *philo)
 		ft_usleep(philo->time_to_sleep, philo);
 		print(THINK, GREEN, philo);
 		if (philo->total_philos % 2)
-			ft_usleep((philo->time_to_eat + 1), philo);
+			ft_usleep((philo->time_to_eat * 0.9), philo);
 	}
-	if (get_time() - philo->last_meal_time >= philo->time_to_die)
-	{
-		print(DEAD, RED, philo);
-		exit(1);
-	}
-	printf("philo %d\n", philo->id); // debug
 	exit(0);
 }
 

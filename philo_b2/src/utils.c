@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 19:01:13 by gaperaud          #+#    #+#             */
-/*   Updated: 2025/01/02 03:49:01 by gaperaud         ###   ########.fr       */
+/*   Updated: 2025/01/02 04:18:29 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,10 @@ void	ft_usleep(long time, t_philo *philo)
 		if (get_time() - philo->last_meal_time > philo->time_to_die)
 		{
 			print(DEAD, RED, philo);
+			sem_wait(philo->print);
 			exit(1);
 		}
-		usleep(50);
+		usleep(100);
 	}
 }
 

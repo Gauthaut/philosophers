@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 02:45:00 by gaperaud          #+#    #+#             */
-/*   Updated: 2024/12/23 13:19:36 by gaperaud         ###   ########.fr       */
+/*   Updated: 2024/12/29 20:42:05 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ void	close_sem(t_philo *philo, int last_index)
 	i = 0;
 	sem_close(philo->forks);
 	sem_close(philo->print);
+	while (i < (*philo).total_philos)
+	{
+		sem_post(philo->waiter);
+		i++;
+	}
 	sem_close(philo->waiter);
 	if (philo->number_of_meal != -1)
 		sem_close(philo->meal_counter);
