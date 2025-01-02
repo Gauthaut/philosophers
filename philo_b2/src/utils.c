@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/31 19:01:13 by gaperaud          #+#    #+#             */
-/*   Updated: 2025/01/02 04:18:29 by gaperaud         ###   ########.fr       */
+/*   Updated: 2025/01/02 04:46:55 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	check_input(int ac, char **av)
 		i++;
 	}
 }
+
 int	ft_atol(char *str)
 {
 	long	num;
@@ -65,6 +66,10 @@ void	ft_usleep(long time, t_philo *philo)
 		{
 			print(DEAD, RED, philo);
 			sem_wait(philo->print);
+			sem_close(philo->forks);
+			sem_close(philo->print);
+			sem_close(philo->waiter);
+			free(philo->pid_tab);
 			exit(1);
 		}
 		usleep(100);

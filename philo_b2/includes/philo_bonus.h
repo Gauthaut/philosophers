@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:16 by gaperaud          #+#    #+#             */
-/*   Updated: 2025/01/02 03:09:11 by gaperaud         ###   ########.fr       */
+/*   Updated: 2025/01/02 04:47:05 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,5 @@ void			ft_usleep(long time, t_philo *philo);
 void			check_input(int ac, char **av);
 int				ft_atol(char *str);
 long			get_time(void);
-
 
 #endif

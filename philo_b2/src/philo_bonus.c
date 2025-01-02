@@ -6,7 +6,7 @@
 /*   By: gaperaud <gaperaud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 16:00:12 by gaperaud          #+#    #+#             */
-/*   Updated: 2025/01/02 04:19:25 by gaperaud         ###   ########.fr       */
+/*   Updated: 2025/01/02 04:46:25 by gaperaud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,16 @@ void	exit_philo(t_philo *philo)
 	if (philo->forks)
 	{
 		sem_close(philo->forks);
-		sem_destroy(philo->forks);
 		sem_unlink(FSEM);
 	}
 	if (philo->print)
 	{
 		sem_close(philo->print);
-		sem_destroy(philo->print);
 		sem_unlink(PSEM);
 	}
 	if (philo->waiter)
 	{
 		sem_close(philo->waiter);
-		sem_destroy(philo->waiter);
 		sem_unlink(WSEM);
 	}
 	exit(philo->exit_value);
@@ -44,8 +41,8 @@ void	exit_philo(t_philo *philo)
 
 void	init_philo(t_philo *philo, int ac, char **av)
 {
-	check_input(ac, av);                  // utils 1;
-	philo->total_philos = ft_atol(av[1]); // utils 2;
+	check_input(ac, av);
+	philo->total_philos = ft_atol(av[1]);
 	philo->time_to_die = ft_atol(av[2]);
 	philo->time_to_eat = ft_atol(av[3]);
 	philo->time_to_sleep = ft_atol(av[4]);
@@ -90,6 +87,10 @@ void	exec_child(t_philo *philo)
 		if (philo->total_philos % 2)
 			ft_usleep((philo->time_to_eat * 0.9), philo);
 	}
+	sem_close(philo->forks);
+	sem_close(philo->print);
+	sem_close(philo->waiter);
+	free(philo->pid_tab);
 	exit(0);
 }
 
